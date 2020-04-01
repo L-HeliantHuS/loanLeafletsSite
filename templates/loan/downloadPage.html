@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    下载
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static '/css/download.css' %}">
+    <style type="text/css">
+        #qrcode {
+            height: 150px;
+            width: 150px;
+        }
+
+
+        .pattern {
+            position: absolute;
+            top: 0;
+            z-index: -1;
+        }
+
+        .left {
+            left: 0;
+        }
+
+        .right {
+            right: 0;
+        }
+
+    </style>
+{% endblock %}
+
+
+{% block body %}
+
+    <body class="container">
+        <span class="pattern left"><img src="{% static '/img/download_pattern_left.png' %}"></span>
+        <span class="pattern right"><img src="{% static '/img/download_pattern_right.png' %}"></span>
+
+        <div class="row" style="padding-top: 300px">
+            <span class="col-xs-6" style="text-align: right">
+                <img src="{% static 'img/ico.png' %}" alt="" width="120" height="120">
+            </span>
+            <span class="col-xs-6">
+                <img src="{% static 'img/qrcode.png' %}" alt="" width="120" height="120">
+            </span>
+        </div>
+
+
+        <div class="row" style="align-items: center; padding-top: 20px">
+            <span style="font-size: 30px; color: #4e4e4e;" class="col-xs-12">助贷宝</span>
+            <br>
+            <span style="color: #8B8E93" class="col-xs-12">扫描二维码下载</span>
+            <br>
+            <span style="color: #8B8E93" class="col-xs-12">或用手机浏览器输入这个网址:<span style="color: #4e4e4e">http://baidu.com</span></span>
+        </div>
+
+        <hr>
+
+        <div class="row" style="padding-top: 50px">
+            <div class="col-xs-6">
+                <div style="text-align: center">
+                    <img src="{% static 'img/android.png' %}" alt="Android" width="50" height="50" style="padding-bottom: 10px">
+                    <p>Android端下载</p>
+                    <p>Version: 0.0.1</p>
+                    <a href="#" class="btn btn-info">点击下载</a>
+                </div>
+
+            </div>
+
+            <div class="col-xs-6">
+                <div style="text-align: center">
+                    <img src="{% static 'img/ios.jpg' %}" alt="IOS" width="50" height="50" style="padding-bottom: 10px">
+                    <p>IOS端下载</p>
+                    <p>Version: 0.0.1</p>
+                    <a href="#" class="btn btn-info">点击下载</a>
+                </div>
+            </div>
+        </div>
+
+
+    </body>
+
+{% endblock %}

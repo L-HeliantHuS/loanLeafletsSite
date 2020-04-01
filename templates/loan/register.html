@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}
+    注册
+{% endblock %}
+
+{% block head %}
+    <style>
+        body {
+            background-color: khaki;
+        }
+
+        .banner {
+            height: 120px;
+            text-align: center;
+        }
+
+        .baner > h1 {
+            line-height: 120px;
+        }
+
+        .form-box {
+            margin: 0;
+            border-radius: 8px;
+            background-color: rgb(255, 255, 255);
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <body>
+
+
+    <div class="container">
+        <div class="banner">
+            <h1>BANNER</h1>
+        </div>
+        <div class="row">
+            <div class="form-box col-xs-12 col-md-6">
+                <form action="{% url 'Download' %}" method="post">
+                    {% csrf_token %}
+
+                    <input type="text" hidden id="code" name="code">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="phone" placeholder="请输入您的手机号码" name="phone">
+                    </div>
+                    <div class="form-group row" style="width: 100%;">
+                        <div class="col-xs-8">
+                            <input type="text" class="form-control" id="captcha" placeholder="请输入右侧验证码" name="captcha">
+                        </div>
+                        <div class="col-xs-4">
+                            <img src="{% url 'Captcha' %}" class="img-responsive" id="captchaIMG" style="height: 34px;" alt="image" onclick="refashCaptcha()">
+                        </div>
+                    </div>
+                    <div class="form-group row" style="width: 100%;">
+                        <div class="col-xs-8">
+                            <input type="text" class="form-control" id="" placeholder="请输入短信验证码" max="4" name="sms">
+                        </div>
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-default" onclick="getSMS(this)" id="sendSMS">发送验证码</button>
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn btn-block btn-primary">开始***</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // refashCaptcha 刷新验证码
+        function refashCaptcha() {
+            $("#captchaIMG").attr("src", "{% url 'Captcha' %}" + "?rnd=" + Math.random());
+        }
+
+        // countdownHandler 点击发送短信之后要做的操作 让按钮倒计时60秒
+        var countdownHandler = function(){
+            var $button = $("#sendSMS");
+            var number = 60;
+            var countdown = function(){
+                if (number === 0) {
+                    $button.attr("disabled",false);
+                    $button.html("发送验证码");
+                    number = 60;
+                    return;
+                } else {
+                    $button.attr("disabled",true);
+                    $button.html(number + "秒 重新发送");
+                    number--;
+                }
+                setTimeout(countdown,1000);
+            };
+            setTimeout(countdown,1000);
+        };
+
+        // getSMS 获取短信验证码
+        function getSMS(obj) {
+            let phone = document.getElementById("phone").value;
+            let captcha = document.getElementById("captcha").value;
+            axios.post("{% url 'SMS' %}", {
+                "phone": phone,
+                "captcha": captcha,
+            })
+                .then(response => {
+                    if (response.data.code !== 0) {
+                        // 校验失败
+                        refashCaptcha();
+                        alert(response.data.error);
+
+                    } else {
+                        // 校验成功
+                        countdownHandler()
+                    }
+                })
+        }
+
+
+
+        let url = window.location.href;
+        let code = url.split("?");
+        code = code[code.length - 1];
+
+        document.getElementById("code").value = code;
+
+    </script>
+
+    </body>
+{% endblock %}
